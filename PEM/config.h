@@ -21,6 +21,7 @@
 #define CODING_RATE 8              // Coding Rate (LoRa, 4/x)
 #define PREAMBLE_LENGTH 12         // Preamble Length (LoRa)
 #define TARGET_STRING "EXIT_STRING" // The string upon which to exit the loop
+#define TRANSMIT_STRING "YourMessage" // Replace with your desired default transmit message
 
 //*******************************************//
 //             Ignition Settings             //
@@ -38,6 +39,7 @@
 //*******************************************//
 void initializeRadio();
 bool checkForReceivedMessage(String &message);
+void transmitMessage(const String &message);
 
 //*******************************************//
 //                Extern                     //

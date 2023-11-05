@@ -1,6 +1,7 @@
 #include "config.h"
 
-// Declare the singleton instance of the radio driver
+// Define the NeoPixel and RF95 instances in the global scope
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
 RH_RF95 rf95(RFM95_CS, RFM95_INT);
 
 void initializeRadio() {
@@ -48,4 +49,20 @@ bool checkForReceivedMessage(String &message) {
         }
     }
     return false;
+}
+
+void transmitMessage(const String &message) {
+    Serial.print("Transmitting: "); Serial.println(message);
+    
+    // Convert the message to a byte array for transmission
+    uint8_t buf[RH_RF95_MAX_MESSAGE_LEN];
+    message.getBytes(buf, RH_RF95_MAX_MESSAGE_LEN);
+    size_t len = message.length();
+
+    // Send the message
+    if (rf95.send(buf, len)) {
+        Serial.println("Message sent successfully");
+    } else {
+        Serial.println("Message failed to send");
+    }
 }

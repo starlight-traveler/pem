@@ -12,9 +12,6 @@ __/\\\\\\\\\\\\\____/\\\\\\\\\\\\\\\__/\\\\____________/\\\\_
 
 #include "config.h"
 
-// Define the NeoPixel object
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, 4, NEO_GRB + NEO_KHZ800);
-
 void setup() {
     Serial.begin(115200);
     while (!Serial) {
@@ -62,13 +59,21 @@ void loop() {
             
             // Set the WRITE_PIN to HIGH
             digitalWrite(WRITE_PIN, HIGH);
-
             // Set the NeoPixel to red, indicating CHECK_PIN is high
             setNeoPixelColor(pixels.Color(255, 0, 0));
+            // Leave once pin written to hight
+            break;
         } else {
             // Set the NeoPixel to purple, indicating CHECK_PIN is not high
             setNeoPixelColor(pixels.Color(128, 0, 128));
         }
+    }
+    
+    // Transmit that system has fired
+    while (1) {
+
+      transmitMessage(TRANSMIT_STRING);
+
     }
 
 }

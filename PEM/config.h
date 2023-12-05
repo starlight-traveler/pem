@@ -29,14 +29,15 @@
 //             Ignition Settings             //
 //*******************************************//
 #define CHECK_PIN 2  // Define the pin number to check
-#define WRITE_PIN 3  // Define the pin number to write high
-
-#define ALTITUDE_READY_PIN 4  // Change to a suitable pin number
+#define WRITE_PIN 10  // Define the pin number to write high
+#define ALTITUDE_READY_PIN 11  // Change to a suitable pin number
 
 //*******************************************//
 //             Neopixel Settings             //
 //*******************************************//
 #define NUMPIXELS 1  // Number of NeoPixels
+#define PIEZO_PIN 13 // Define the pin number for the piezo buzzer
+
 
 //*******************************************//
 //             Function Declarations         //
@@ -44,7 +45,7 @@
 void initializeRadio();
 bool checkForReceivedMessage(String &message);
 void transmitMessage(const String &message);
-bool checkAndSetAltitude();
+bool checkAndSetAltitude(float triggerAltitude);
 
 //*******************************************//
 //                Extern                     //

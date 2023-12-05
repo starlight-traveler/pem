@@ -52,20 +52,11 @@ bool checkForReceivedMessage(String &message) {
   return false;
 }
 
-bool altitudeTargetSet = false;
-float triggerAltitude = 0.0;
 
-bool checkAndSetAltitude() {
+bool checkAndSetAltitude(float triggerAltitude) {
   float altitude = altimeter.getAltitude();  // Read current altitude
   Serial.print("Current Altitude: ");
   Serial.println(altitude);
-
-  if (!altitudeTargetSet) {
-    triggerAltitude = altitude + 200.0;  // Add 200 feet to the initial altitude
-    altitudeTargetSet = true;            // Ensure this block runs only once
-    Serial.print("Target Altitude Set: ");
-    Serial.println(triggerAltitude);
-  }
 
   if (altitude >= triggerAltitude) {
     digitalWrite(ALTITUDE_READY_PIN, HIGH);  // Set the pin high
@@ -92,3 +83,10 @@ void transmitMessage(const String &message) {
     Serial.println("Message failed to send");
   }
 }
+
+void beepPiezo() {
+  digitalWrite(PIEZO_PIN, HIGH); // Turn piezo on
+  delay(100); // Delay for 100 milliseconds
+  digitalWrite(PIEZO_PIN, LOW); // Turn piezo off
+}
+

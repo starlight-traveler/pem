@@ -23,6 +23,7 @@ void setup() {
   pinMode(CHECK_PIN, INPUT);
   pinMode(WRITE_PIN, OUTPUT);
   pinMode(ALTITUDE_READY_PIN, OUTPUT);  // Pin to indicate altitude condition met
+  pinMode(PIEZO_PIN, OUTPUT);  // Set piezo pin as output
 
 
   // Initialize NeoPixel
@@ -32,9 +33,12 @@ void setup() {
   // Initialize MPL3115A2
   if (!altimeter.begin()) {
     Serial.println("Could not find a valid MPL3115A2 sensor, check wiring!");
-    while (1)
-      ;
+    while (1);
   }
+
+  
+
+  
 }
 
 
@@ -42,12 +46,21 @@ void loop() {
   String message;
   bool received = false;
   bool continueChecking = false;
+  bool altitudeTargetSet = false;
+  float triggerAltitude = 0.0;
+
+  if (altitudeTargetSet == false) {
+    float triggerAltitude = altimeter.getAltitude() + 200.0;  // Add 200 feet to the initial altitude
+    altitudeTargetSet = true;            // Ensure this block runs only once
+    Serial.print("Target Altitude Set: ");
+    Serial.println(triggerAltitude);
+  }
 
   // Continuously check for received messages
   while (!received) {
     // Set the NeoPixel to yellow, indicating waiting for message
     setNeoPixelColor(pixels.Color(255, 255, 0));
-
+    beepPiezo();
     received = checkForReceivedMessage(message);
     if (received) {
       // If TARGET_STRING is received, activate continuous checking
@@ -82,7 +95,7 @@ void loop() {
   }
 
   while (1) {
-    bool altitudeReached = checkAndSetAltitude();
+    bool altitudeReached = checkAndSetAltitude(triggerAltitude);
     if (altitudeReached) {
       Serial.println("Target altitude reached, exiting loop.");
       break;  // Break out of the loop once target altitude is reached

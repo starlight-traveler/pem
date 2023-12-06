@@ -28,7 +28,7 @@
 //*******************************************//
 //             Ignition Settings             //
 //*******************************************//
-#define CHECK_PIN 2  // Define the pin number to check
+#define CHECK_PIN 24  // Define the pin number to check
 #define WRITE_PIN 10  // Define the pin number to write high
 #define ALTITUDE_READY_PIN 11  // Change to a suitable pin number
 
@@ -43,9 +43,15 @@
 //             Function Declarations         //
 //*******************************************//
 void initializeRadio();
-bool checkForReceivedMessage(String &message);
+bool checkForReceivedMessage(String &message, float &triggerAltitude);
 void transmitMessage(const String &message);
 bool checkAndSetAltitude(float triggerAltitude);
+void checkForOpcode(bool &received, bool &continueChecking, bool &altitudeTargetSet, float &triggerAltitude);
+void beepPiezo();
+void writeToFlash(const char* message);
+
+
+
 
 //*******************************************//
 //                Extern                     //

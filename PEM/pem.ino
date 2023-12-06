@@ -21,38 +21,40 @@ void setup() {
   initializeRadio();  // Initialize the radio module
 
   // Set pin modes for various functionalities
-  pinMode(CHECK_PIN, INPUT);  // Set CHECK_PIN as input
-  pinMode(WRITE_PIN, OUTPUT);  // Set WRITE_PIN as output
+  pinMode(CHECK_PIN, INPUT);            // Set CHECK_PIN as input
+  pinMode(WRITE_PIN, OUTPUT);           // Set WRITE_PIN as output
   pinMode(ALTITUDE_READY_PIN, OUTPUT);  // Set ALTITUDE_READY_PIN as output, used to indicate altitude condition met
-  pinMode(PIEZO_PIN, OUTPUT);  // Set PIEZO_PIN as output for piezo buzzer
+  pinMode(PIEZO_PIN, OUTPUT);           // Set PIEZO_PIN as output for piezo buzzer
 
   // Initialize NeoPixel LED
   pixels.begin();  // Initialize NeoPixel
-  pixels.show();  // Turn off all pixels (initial state)
+  pixels.show();   // Turn off all pixels (initial state)
 
-  // Initialize MPL3115A2 altimeter sensor
   delay(5000);
 
+  transmitMessage("PEM Module Live.");
+
+  // Initialize MPL3115A2 altimeter sensor
   if (!altimeter.begin()) {
     Serial.println("Could not find a valid MPL3115A2 sensor, check wiring!");
-    while (1);  // Infinite loop if sensor not found
+    while (1)
+      ;  // Infinite loop if sensor not found
   }
 }
 
 void loop() {
-  String message;  // To store received message
-  bool received = false;  // Flag to indicate message receipt
-  bool continueChecking = false;  // Flag for continuous checking of CHECK_PIN
+  String message;                  // To store received message
+  bool received = false;           // Flag to indicate message receipt
+  bool continueChecking = false;   // Flag for continuous checking of CHECK_PIN
   bool altitudeTargetSet = false;  // Flag to indicate if target altitude is set
-  float triggerAltitude = 0.0;  // Variable to store target altitude
-
+  float triggerAltitude = 0.0;     // Variable to store target altitude
 
 
   // Set target altitude if not already set
   if (!altitudeTargetSet) {
     triggerAltitude = altimeter.getAltitude() + 200.0;  // Set target altitude 200 feet above initial altitude
-    altitudeTargetSet = true;  // Mark target altitude as set
-    String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) +"!";
+    altitudeTargetSet = true;                           // Mark target altitude as set
+    String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
     const char* messageAltChar = messageAlt.c_str();
     writeToFlash(messageAltChar);
     Serial.print("Target Altitude Set: ");
@@ -61,12 +63,12 @@ void loop() {
 
   // Continuously check for received messages
   while (!received) {
-    setNeoPixelColor(pixels.Color(255, 255, 0));  // Set NeoPixel to yellow, indicating waiting for message
+    setNeoPixelColor(pixels.Color(255, 255, 0));                   // Set NeoPixel to yellow, indicating waiting for message
     received = checkForReceivedMessage(message, triggerAltitude);  // Check for received message
     if (received) {
       // If specific target string is received
       if (message == TARGET_STRING) {
-        continueChecking = true;  // Enable continuous checking
+        continueChecking = true;                    // Enable continuous checking
         setNeoPixelColor(pixels.Color(0, 255, 0));  // Set NeoPixel to green, indicating target string received
         Serial.println("Target string received, starting continuous pin check.");
         String messageTarget = String(millis()) + " - Target string recieved!";
@@ -89,17 +91,17 @@ void loop() {
       const char* messageEggTimerChar = messageEggTimer.c_str();
       writeToFlash(messageEggTimerChar);
       setNeoPixelColor(pixels.Color(255, 0, 0));  // Set NeoPixel to red, indicating CHECK_PIN is high
-      break;  // Exit loop once pin is written high
+      break;                                      // Exit loop once pin is written high
     } else {
       setNeoPixelColor(pixels.Color(128, 0, 128));  // Set NeoPixel to purple, indicating CHECK_PIN is not high
     }
-      checkForOpcode(received, continueChecking, altitudeTargetSet, triggerAltitude);  // Check for opcodes
+    checkForOpcode(received, continueChecking, altitudeTargetSet, triggerAltitude);  // Check for opcodes
   }
 
   // Loop until target altitude is reached
   while (1) {
     bool altitudeReached = checkAndSetAltitude(triggerAltitude);  // Check if target altitude is reached
-    checkForOpcode(received, continueChecking, altitudeTargetSet, triggerAltitude);      
+    checkForOpcode(received, continueChecking, altitudeTargetSet, triggerAltitude);
     if (altitudeReached) {
       Serial.println("Target altitude reached, exiting loop.");
       String messageAltReached = String(millis()) + " - Target Altitude Reached!";
@@ -109,13 +111,11 @@ void loop() {
     }
   }
 
-
-
   setNeoPixelColor(pixels.Color(0, 0, 255));  // Set NeoPixel color to blue
 
-    String messageFired = String(millis()) + " - Fired!";
-    const char* messageFiredChar = messageFired.c_str();
-    writeToFlash(messageFiredChar);
+  String messageFired = String(millis()) + " - Fired!";
+  const char* messageFiredChar = messageFired.c_str();
+  writeToFlash(messageFiredChar);
 
   // Transmit that system has fired
   while (1) {

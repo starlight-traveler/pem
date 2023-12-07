@@ -148,9 +148,9 @@ void transmitMessage(const String &message) {
 // Pizeo Checking
 
 void beepPiezo() {
-  digitalWrite(PIEZO_PIN, HIGH); // Turn piezo on
-  delay(1000);
-  digitalWrite(PIEZO_PIN, LOW); // Turn piezo on
+  tone(PIEZO_PIN, 1000);
+  delay(100);                // Wait for a short period
+  noTone(PIEZO_PIN);         // Stop sound
 }
 
 // OP Code Checking, Will Return Value

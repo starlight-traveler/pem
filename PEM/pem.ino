@@ -64,6 +64,7 @@ void loop() {
   // Continuously check for received messages
   while (!received) {
     setNeoPixelColor(pixels.Color(255, 255, 0));                   // Set NeoPixel to yellow, indicating waiting for message
+    beepPiezo();
     received = checkForReceivedMessage(message, triggerAltitude);  // Check for received message
     if (received) {
       // If specific target string is received
@@ -82,6 +83,8 @@ void loop() {
       }
     }
   }
+
+  noTone(PIEZO_PIN);
 
   // Continuous checking of CHECK_PIN after receiving target message
   while (continueChecking) {

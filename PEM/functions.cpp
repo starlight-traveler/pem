@@ -115,6 +115,7 @@ bool checkForReceivedMessage(String &message, float &triggerAltitude) {
 
 
 bool checkAndSetAltitude(float triggerAltitude) {
+  digitalWrite(ALTITUDE_READY_PIN, LOW);
   float altitude = altimeter.getAltitude();  // Read current altitude
   Serial.print("Current Altitude: ");
   Serial.println(altitude);
@@ -148,9 +149,7 @@ void transmitMessage(const String &message) {
 // Pizeo Checking
 
 void beepPiezo() {
-  tone(PIEZO_PIN, 1000);
-  delay(100);                // Wait for a short period
-  noTone(PIEZO_PIN);         // Stop sound
+  digitalWrite(PIEZO_PIN, HIGH);
 }
 
 // OP Code Checking, Will Return Value

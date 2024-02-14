@@ -37,8 +37,6 @@ void setup() {
   // Initialize MPL3115A2 altimeter sensor
   if (!altimeter.begin()) {
     Serial.println("Could not find a valid MPL3115A2 sensor, check wiring!");
-    while (1)
-      ;  // Infinite loop if sensor not found
   }
 }
 
@@ -52,6 +50,7 @@ void loop() {
 
   // Set target altitude if not already set
   if (!altitudeTargetSet) {
+    delay(5);
     triggerAltitude = altimeter.getAltitude() + 200.0;  // Set target altitude 200 feet above initial altitude
     altitudeTargetSet = true;                           // Mark target altitude as set
     String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
@@ -60,6 +59,10 @@ void loop() {
     Serial.print("Target Altitude Set: ");
     Serial.println(triggerAltitude);
   }
+
+   String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
+  String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
+    String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
 
   // Continuously check for received messages
   while (!received) {
@@ -84,7 +87,7 @@ void loop() {
     }
   }
 
-  noTone(PIEZO_PIN);
+  digitalWrite(PIEZO_PIN, LOW);
 
   // Continuous checking of CHECK_PIN after receiving target message
   while (continueChecking) {

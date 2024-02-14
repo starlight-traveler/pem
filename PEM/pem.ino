@@ -51,7 +51,7 @@ void loop() {
   // Set target altitude if not already set
   if (!altitudeTargetSet) {
     delay(5);
-    triggerAltitude = altimeter.getAltitude() + 200.0;  // Set target altitude 200 feet above initial altitude
+    triggerAltitude = altimeter.getAltitude() + 100.0;  // Set target altitude 200 feet above initial altitude
     altitudeTargetSet = true;                           // Mark target altitude as set
     String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
     const char* messageAltChar = messageAlt.c_str();
@@ -60,9 +60,9 @@ void loop() {
     Serial.println(triggerAltitude);
   }
 
-   String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
   String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
-    String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
+  String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
+  String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
 
   // Continuously check for received messages
   while (!received) {

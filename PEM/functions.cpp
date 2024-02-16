@@ -45,6 +45,8 @@ void initializeRadio() {
   rf95.setSpreadingFactor(SPREADING_FACTOR);
   rf95.setCodingRate4(CODING_RATE);
   rf95.setPreambleLength(PREAMBLE_LENGTH);
+  rf95.setPromiscuous(true);
+
 }
 
 bool checkForReceivedMessage(String &message, float &triggerAltitude) {
@@ -115,7 +117,6 @@ bool checkForReceivedMessage(String &message, float &triggerAltitude) {
 
 
 bool checkAndSetAltitude(float triggerAltitude) {
-  digitalWrite(ALTITUDE_READY_PIN, LOW);
   float altitude = altimeter.getAltitude();  // Read current altitude
   Serial.print("Current Altitude: ");
   Serial.println(altitude);

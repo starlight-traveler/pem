@@ -60,10 +60,6 @@ void loop() {
     Serial.println(triggerAltitude);
   }
 
-  String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
-  String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
-  String messageAlt = String(millis()) + " - Altitude target set to " + String(triggerAltitude) + "!";
-
   // Continuously check for received messages
   while (!received) {
     setNeoPixelColor(pixels.Color(255, 255, 0));                   // Set NeoPixel to yellow, indicating waiting for message
@@ -71,7 +67,7 @@ void loop() {
     received = checkForReceivedMessage(message, triggerAltitude);  // Check for received message
     if (received) {
       // If specific target string is received
-      if (message == TARGET_STRING) {
+      if (message == TARGET_STRING || strstr(message.c_str(), "ZQ") != NULL) {
         continueChecking = true;                    // Enable continuous checking
         setNeoPixelColor(pixels.Color(0, 255, 0));  // Set NeoPixel to green, indicating target string received
         Serial.println("Target string received, starting continuous pin check.");

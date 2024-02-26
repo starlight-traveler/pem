@@ -12,6 +12,8 @@ __/\\\\\\\\\\\\\____/\\\\\\\\\\\\\\\__/\\\\____________/\\\\_
 
 #include "config.h"  // Include configuration header file
 
+void setNeoPixelColor(uint32_t color);
+
 Adafruit_MPL3115A2 altimeter = Adafruit_MPL3115A2();  // Initialize altimeter object
 
 void setup() {
@@ -87,7 +89,7 @@ void loop() {
 
   // Continuous checking of CHECK_PIN after receiving target message
   while (continueChecking) {
-    if (digitalRead(CHECK_PIN) == HIGH) {
+    if (digitalRead(CHECK_PIN) == LOW) {
       digitalWrite(WRITE_PIN, HIGH);  // Set WRITE_PIN high
       String messageEggTimer = String(millis()) + " - Eggtimer Activated!";
       const char* messageEggTimerChar = messageEggTimer.c_str();

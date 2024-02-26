@@ -33,6 +33,8 @@ RH_RF95 rf95(RADIO_CS_PIN, RADIO_DIO0_PIN);
 // OLED Display instance
 U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, I2C_SCL, I2C_SDA, U8X8_PIN_NONE);
 
+void displayMessage(const char *message);
+
 void setup() {
   pinMode(RADIO_RST_PIN, OUTPUT);
   digitalWrite(RADIO_RST_PIN, HIGH);
@@ -89,7 +91,7 @@ void loop() {
                 Serial.println(message); // Print received message to Serial Monitor
                 displayMessage(message.c_str()); // Display received message on OLED
             } else {
-                OPSerial.println("Receive failed");
+                Serial.println("Receive failed");
             }
         }
     }
